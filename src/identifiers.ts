@@ -13,8 +13,13 @@ function validateFixedDigits(
   length: number,
   label: string,
 ): ValidationResult {
-  const normalized = digits(value);
+  const raw = String(value).trim();
+  const normalized = digits(raw);
   const errors: string[] = [];
+
+  if (!/^\d+$/.test(raw)) {
+    errors.push(`${label} must contain digits only.`);
+  }
 
   if (normalized.length !== length) {
     errors.push(`${label} must contain exactly ${length} digits.`);
@@ -47,14 +52,17 @@ export function validateMunicipalityCode(value: string | number): ValidationResu
   return validateFixedDigits(value, 7, "IBGE municipality code");
 }
 
-/** Competence in YYYYMM format. */
+/** Competence in YYYYMM format; YYYY-MM and YYYY/MM are accepted and normalized. */
 export function validateCompetence(value: string | number): ValidationResult {
-  const normalized = digits(value);
+  const raw = String(value).trim();
+  const normalized = digits(raw);
   const errors: string[] = [];
 
-  if (!/^\d{6}$/.test(normalized)) {
-    errors.push("Competence must use YYYYMM format.");
-  } else {
+  if (!/^\d{6}$/.test(raw) && !/^\d{4}[-/]\d{2}$/.test(raw)) {
+    errors.push("Competence must use YYYYMM, YYYY-MM or YYYY/MM format.");
+  }
+
+  if (normalized.length === 6) {
     const year = Number(normalized.slice(0, 4));
     const month = Number(normalized.slice(4, 6));
 
@@ -64,6 +72,8 @@ export function validateCompetence(value: string | number): ValidationResult {
     if (month < 1 || month > 12) {
       errors.push("Competence month must be between 01 and 12.");
     }
+  } else if (errors.length === 0) {
+    errors.push("Competence must contain a four-digit year and two-digit month.");
   }
 
   return {
@@ -75,6 +85,8 @@ export function validateCompetence(value: string | number): ValidationResult {
 
 /** Extracts the first CNES value found in a CNES-style XML document. */
 export function extractCnesFromXml(xml: string): string | null {
-  const match = xml.match(/<(?:[A-Za-z0-9_-]+:)?CNES\b[^>]*>\s*(\d{7})\s*<\//i);
+  const match = xml.match(
+    /<(?:[A-Za-z0-9_-]+:)?CNES\b[^>]*>\s*(\d{7})\s*<\/(?:[A-Za-z0-9_-]+:)?CNES\s*>/i,
+  );
   return match?.[1] ?? null;
 }
