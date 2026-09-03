@@ -15,6 +15,7 @@ test("validates and normalizes CNES", () => {
     errors: [],
   });
   assert.equal(validateCnes("123").valid, false);
+  assert.equal(validateCnes("abc1234567").valid, false);
 });
 
 test("validates CBO and SUS procedure codes by structural length", () => {
@@ -23,9 +24,12 @@ test("validates CBO and SUS procedure codes by structural length", () => {
   assert.equal(validateProcedureCode("301010064").valid, false);
 });
 
-test("validates competence", () => {
+test("validates and normalizes competence", () => {
   assert.equal(validateCompetence("202609").valid, true);
+  assert.equal(validateCompetence("2026-09").valid, true);
+  assert.equal(validateCompetence("2026/09").valid, true);
   assert.equal(validateCompetence("202613").valid, false);
+  assert.equal(validateCompetence("abc202609").valid, false);
   assert.equal(validateCompetence("2026-09").normalized, "202609");
 });
 
