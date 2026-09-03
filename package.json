@@ -4,10 +4,10 @@
   "description": "Open-source TypeScript utilities for Brazilian SUS/DATASUS interoperability.",
   "license": "MIT",
   "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
   "bin": {
-    "sus-toolkit": "./dist/cli.js"
+    "sus-toolkit": "./dist/src/cli.js"
   },
   "files": [
     "dist",
@@ -16,8 +16,8 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "npm run build && node --test dist/**/*.test.js",
-    "check": "npm run build && npm test"
+    "test": "npm run build && node --test dist/test/identifiers.test.js dist/test/sia-report.test.js",
+    "check": "npm test"
   },
   "engines": {
     "node": ">=20"
