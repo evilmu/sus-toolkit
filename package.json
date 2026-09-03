@@ -1,0 +1,46 @@
+{
+  "name": "sus-toolkit",
+  "version": "0.1.0",
+  "description": "Open-source TypeScript utilities for Brazilian SUS/DATASUS interoperability.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "bin": {
+    "sus-toolkit": "./dist/src/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node --test dist/test/identifiers.test.js dist/test/sia-report.test.js",
+    "check": "npm test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "sus",
+    "datasus",
+    "cnes",
+    "sia",
+    "bpa",
+    "healthcare",
+    "brasil"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evilmu/sus-toolkit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/evilmu/sus-toolkit/issues"
+  },
+  "homepage": "https://github.com/evilmu/sus-toolkit#readme",
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.0"
+  }
+}
